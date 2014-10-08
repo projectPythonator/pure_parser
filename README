@@ -30,16 +30,16 @@ Program Description:
 
 ********************************************************************************
 Results for Test Cases:
-Test Case        Pass Or Not             Variables             Functions            Statements        
-ab.c             Pass                    3                     1                    4
-automaton.c      Pass                    5                     6                    48
-binrep.c         Pass                    3                     2                    21
-fibonacci.c      Pass                    6                     3                    17
-loop_for.c       Pass                    1                     1                    3
-loop_while.c     Pass                    1                     1                    5
-mandel.c         Pass                    16                    6                    34
-MeaningOfLife.c  Pass                    2                     2                    7
-tax.c            Pass                    22                    2                    97        
+Test Case        Pass Or Not     Variables       Functions            Statements        
+ab.c             Pass               3               1                    4
+automaton.c      Pass               5               6                    48
+binrep.c         Pass               3               2                    21
+fibonacci.c      Pass               6               3                    17
+loop_for.c       Pass               1               1                    3
+loop_while.c     Pass               1               1                    5
+mandel.c         Pass               16              6                    34
+MeaningOfLife.c  Pass               2               2                    7
+tax.c            Pass               22              2                    97        
 
 
 ********************************************************************************
