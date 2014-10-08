@@ -1,0 +1,105 @@
+Author: Chunpai Wang
+Email: cwang64@u.rochester.edu
+Date: Oct 01, 2014
+
+**************************************************************************************************
+This folder contains 4 files:
+1. README: this file
+2. tokenizer.py  : scan program into tokens
+3. parser.py  : LL(1) parsing (recursive descent)
+4. test_files  : folder stored test cases
+**************************************************************************************************
+
+How to run this program:
+            "./parser case_file" 
+    or 
+            "python parser.py case_file"
+
+**************************************************************************************************
+Program Description:
+1. convert the grammar to LL(1) grammar and support recursive descent, and I add some new grammars
+    to expand this subset of C language a little bit. 
+2. extract the predict set for each production rules
+3. code each production rule into function
+4. My grammar support 'for loop', you can check <for_loop_statement> production rule below.
+5. For 'if_else_statement', this program also support only one statement come after 'if' or 'else' 
+    without curly brace. See <if_else_statement> production rule below.
+6. Also, it supports 'string' as parameter when do function call. See <expression> production rule.
+7. It supports incremental assignment statement, like "i++;". See <assignment> production rule
+
+
+**************************************************************************************************
+Results for Test Cases:
+Test Case               Pass Or Not             Variables             Functions            Statements        
+ab.c                        Pass                    3                     1                    4
+automaton.c                 Pass                    5                     6                    48
+binrep.c                    Pass                    3                     2                    21
+fibonacci.c                 Pass                    6                     3                    17
+loop_for.c                  Pass                    1                     1                    3
+loop_while.c                Pass                    1                     1                    5
+mandel.c                    Pass                    16                    6                    34
+MeaningOfLife.c             Pass                    2                     2                    7
+tax.c                       Pass                    22                    2                    97        
+
+
+**************************************************************************************************
+Modified LL(1) grammar:
+    <program> --> <data decls> <func list>
+    <func list> --> <func> <func list> | empty
+    <func> --> <func decl> <func_tail>
+    <func_tail> —> semicolon | left_brace <data decls><statements> right_brace
+    <func decl> --> <type name> ID left_parenthesis <parameter list> right_parenthesis
+    <type name> --> int | void 
+    <parameter list> --> empty | void | <non-empty list>
+    <non-empty list> --> int ID <non-empty list prime> 
+    <non-empty list prime> —> comma int ID <non-empty list prime>| empty
+    <data decls> --> empty | <type name> <id list> semicolon <data decls>
+    <id list> --> <id> <id list prime> 
+    <id list prime> —> comma <id> <id list prime> | empty
+    <id> --> ID <id_tail>
+    <id_tail> -> left_bracket <expression> right_bracket | empty
+    <block statements> --> left_brace <statements> right_brace | <statement> 
+    <statements> --> <statement> <statements> | empty 
+    <statement> --> ID <assignment> | 
+                    ID <general func call> | 
+                    <printf func call> | 
+                    <scanf func call> | 
+                    <if_else_statement> | 
+                    <while statement> | 
+                    <return statement> | 
+                    <break statement> | 
+                    <continue statement> | 
+                    <for statement>
+    <assignment> --> <id_tail> equal_sign <expression> semicolon | <double_plus_or_minus> semicolon
+    <double_plus_or_minus> -> double_plus_sign | double_minus_sign
+    <general func call> --> left_parenthesis <expr list> right_parenthesis semicolon 
+    <printf func call> --> ID left_parenthesis string <printf fun call tail>
+    <printf fun call tail>—> right_parenthesis semicolon | comma <expression> right_parenthesis semicolon  
+    <scanf func call> --> ID left_parenthesis string comma and_sign <expression> right_parenthesis semicolon   
+    <expr list> --> empty | <non-empty expr list> <non-empty expr list> --> <expression> <non-empty expr list prime> 
+    <non-empty expo list prime> —> comma <expression><non-empty expo list prime> | empty
+    <if statement> --> if left_parenthesis <condition expression> right_parenthesis <block statements>
+    <else statement> —> else <block statements> 
+    <if_else_statement> —> <if statement><else statement>
+    <for statement> —> for left_parenthesis <for_block_1> <for_block_2> <for_block_3> right_parenthesis <block statements>
+    <for_block_1> —> ID | ID  <assignment>
+    <for_block_2> —> <condition expression> Semicolon
+    <for_block_3> —> ID double_plus_or_minus
+    <condition expression> -->  <condition> <condtion_tail>
+    <condition_tail> —> <condition op> <condition> | empty
+    <condition op> --> double_and_sign | double_or_sign
+    <condition> --> <expression> <comparison op> <expression>
+    <comparison op> --> == | != | > | >= | < | <=
+    <while statement> --> while left_parenthesis <condition expression> right_parenthesis <block statements>
+    <return statement> --> return <return_stmt_tail>
+    <return_stmt_tail> -—> <expression> semicolon | semicolon
+    <break statement> ---> break semicolon
+    <continue statement> ---> continue semicolon
+    <expression> --> <term> <expression prime> | string
+    <expression prime> —> <addop> <term> <expression prime> | empty
+    <addop> --> plus_sign | minus_sign
+    <term> --> <factor> <term prime>
+    <term prime> —> <mulop> <factor> <term prime> | empty
+    <mulop> --> star_sign | forward_slash
+    <factor> --> ID factor_tail| NUMBER | minus_sign NUMBER | left_parenthesis <expression> right_parenthesis 
+    <factor_tail> —> left_bracket <expression> right_bracket | left_parenthesis <expr list> right_parenthesis | empty
